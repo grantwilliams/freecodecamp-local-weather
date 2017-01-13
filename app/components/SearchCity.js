@@ -30,7 +30,10 @@ const SearchCity = props => {
 };
 
 SearchCity.propTypes = {
-    
+    handleOnChange: PropTypes.func.isRequired,
+    handleChangeCity: PropTypes.func.isRequired,
+    suggestions: PropTypes.array.isRequired,
+    value: PropTypes.string.isRequired
 };
 
 export default SearchCity;

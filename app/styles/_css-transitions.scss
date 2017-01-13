@@ -1,0 +1,26 @@
+.weather-appear {
+  opacity: 0.01;
+}
+
+.weather-appear.weather-appear-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.weather-enter {
+  opacity: 0.01;
+}
+
+.weather-enter.weather-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.weather-leave {
+  opacity: 1;
+}
+
+.weather-leave.weather-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}

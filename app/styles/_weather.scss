@@ -1,0 +1,31 @@
+.weather-details {
+    margin: 20px 0 20px 0;
+    padding: 10px 0 30px 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.detail-box {
+    background: rgba(76, 174, 76, 0.65);
+    margin: 10px;
+    padding: 10px 0 10px 0;
+    font-size: 1.4em;
+    text-align: center;
+    height: 100%;
+}
+
+.details-row {
+    margin: 30px 10px 30px 10px;
+}
+
+div#temperature {
+    font-size: 2.5em;
+}
+
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:visited,
+.btn-primary:focus {
+    background-color: rgba(76, 174, 76, 0.65);
+    margin-left: 40px;
+}

@@ -1,9 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import Loading from '../components/Loading';
 import Weather from '../components/Weather';
-import SearchCity from '../components/SearchCity';
+import SearchCityContainer from './SearchCityContainer';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import api from '../utils/api';
-import '../main.scss';
+import '../styles/main.scss';
 
 class AppContainer extends Component {
     constructor(props) {
@@ -19,10 +20,6 @@ class AppContainer extends Component {
         }
     }
 
-    // componentWillMount() {
-        
-    // }
-
     handleToggleUnits() {
         let newUnits = this.state.units == 'metric' ? 'imperial' : 'metric'
         api.getWeatherLongLat(this.state.coords, newUnits)
@@ -31,20 +28,6 @@ class AppContainer extends Component {
                 isLoading: false,
                 weatherDetails: details.data,
                 units: newUnits
-            });
-        })
-    }
-
-    handleOnChange(e) {
-        this.setState({
-            searchValue: e.target.value
-        });
-        api.getCitySuggestions(e.target.value).then(results => {
-            var citySuggestions = results.data.geonames.map(suggestion => {
-                return `${suggestion.name}, ${suggestion.countryCode}`
-            })
-            this.setState({
-                citySuggestions: citySuggestions
             });
         })
     }
@@ -106,30 +89,7 @@ class AppContainer extends Component {
         })
     }
 
-    // componentWillReceiveProps(nextProps) {
-
-    // }
-
-    // shouldComponentUpdate(nextProps, nextState) {
-
-    // }
-
-    // componentWillUpdate(nextProps, nextState) {
-
-    // }
-
-    // componentDidUpdate(prevProps, prevState) {
-
-    // }
-
-    // componentWillUnmount() {
-
-    // }
-
     render() {
-        document.body.style.backgroundImage = `url(${this.state.backgroundImage})`
-        document.body.style.backgroundSize = 'cover'
-        document.body.style.backgroundRepeat = 'no-repeat'
         return (
             <div id="main-wrapper" className="container">
                 <div id="title-text" className="text-center">
@@ -138,19 +98,28 @@ class AppContainer extends Component {
                         FreeCodeCamp Zipline
                     </div>
                 </div>
-                <SearchCity
-                handleOnChange={this.handleOnChange.bind(this)}
-                handleChangeCity={this.handleChangeCity.bind(this)}
-                suggestions={this.state.citySuggestions}
-                value={this.state.searchValue} />
+                <SearchCityContainer
+                handleChangeCity={this.handleChangeCity.bind(this)} />
                 {this.state.isLoading
                 ? <Loading />
-                : <Weather
+                : <ReactCSSTransitionGroup
+                transitionName="weather"
+                transitionAppear={true}
+                transitionLeave={false}
+                transitionAppearTimeout={500}
+                transitionEnterTimeout={500}
+                component="div"
+                className="weather-details" >
+                <Weather
                   weatherDetails={this.state.weatherDetails}
                   icon={this.state.weatherDetails.weather[0].icon + ".png"}
                   currentTemperature={Math.floor(this.state.weatherDetails.main.temp)}
                   units={this.state.units}
-                  handleToggleUnits={this.handleToggleUnits.bind(this)} />}
+                  handleToggleUnits={this.handleToggleUnits.bind(this)}
+                  backgroundImage={this.state.backgroundImage}
+                  key={this.state.weatherDetails.name} /> 
+                  </ReactCSSTransitionGroup>
+                }
             </div>
         );
     }

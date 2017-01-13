@@ -1,7 +1,8 @@
 import React, {PropTypes} from 'react';
 
 const Weather = props => {
-    console.log(props);
+    console.log(props.weatherDetails);
+    document.body.style.backgroundImage = `url(${props.backgroundImage})`
     function toTitleCase(str) {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
@@ -33,17 +34,39 @@ const Weather = props => {
                         </div>
                     </div>
                 </div>
-                <div className="clearfix"></div>
-                <div className="row details-row text-center">
-                    <span id="temp-max" className="detail-box">{"Max temp: " + props.weatherDetails.main.temp_max} &deg;{props.units == 'metric' ? 'C' : 'F'}</span>
-                    <span id="humidity" className="detail-box">{"Humidity: " + props.weatherDetails.main.humidity + '%'}</span>
-                    <span id="cloudiness" className="detail-box">{"Cloudiness: " + props.weatherDetails.clouds.all + '%'}</span>
+                <div className="col-xs-12">
+                    <div id="temp-max" className="col-xs-4">
+                        <div className="detail-box">
+                            {"Max temp: " + props.weatherDetails.main.temp_max} &deg;{props.units == 'metric' ? 'C' : 'F'}
+                        </div>
+                    </div>
+                    <div id="humidity" className="col-xs-4">
+                        <div className="detail-box">
+                            {"Humidity: " + props.weatherDetails.main.humidity + '%'}
+                        </div>
+                    </div>
+                    <div id="cloudiness" className="col-xs-4">
+                        <div className="detail-box">
+                            {"Cloudiness: " + props.weatherDetails.clouds.all + '%'}
+                        </div>
+                    </div>
                 </div>
-                <div className="clearfix"></div>
-                <div className="row details-row text-center">
-                    <span id="wind-speed" className="detail-box">{"Wind Speed: " + props.weatherDetails.wind.speed} {props.units == 'metric' ? ' meter/sec' : ' miles/hour'}</span>
-                    <span id="wind-direction" className="detail-box">{"Wind Directions: " + props.weatherDetails.wind.deg} &deg;</span>
-                    <span id="pressure" className="detail-box">{"Pressure: " + props.weatherDetails.main.pressure}</span>
+                <div className="col-xs-12">
+                    <div id="wind-speed" className="col-xs-4">
+                        <div className="detail-box">
+                            {"Wind Speed: " + props.weatherDetails.wind.speed} {props.units == 'metric' ? ' meter/sec' : ' miles/hour'}
+                        </div>
+                    </div>
+                    <div id="wind-direction" className="col-xs-4">
+                        <div className="detail-box">
+                            {"Wind Directions: " + props.weatherDetails.wind.deg} &deg;
+                        </div>
+                    </div>
+                    <div id="pressure" className="col-xs-4">
+                        <div className="detail-box">
+                            {"Pressure: " + props.weatherDetails.main.pressure + " hPa"}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,7 +74,11 @@ const Weather = props => {
 };
 
 Weather.propTypes = {
-    
+    weatherDetails: PropTypes.object.isRequired,
+    icon: PropTypes.string.isRequired,
+    currentTemperature: PropTypes.number.isRequired,
+    units: PropTypes.string.isRequired,
+    handleToggleUnits: PropTypes.func.isRequired
 };
 
 export default Weather;

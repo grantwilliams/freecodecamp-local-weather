@@ -7,14 +7,18 @@
     "production": "webpack -p",
     "start": "webpack-dev-server"
   },
+  "repository": "https://github.com/grantwilliams/freecodecamp-local-weather.git",
   "author": "Grant Williams",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.15.3",
     "css-loader": "^0.26.1",
+    "file-loader": "^0.9.0",
     "jquery": "^3.1.1",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-addons-css-transition-group": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "url-loader": "^0.5.7"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
@@ -27,6 +31,7 @@
     "node-sass": "^4.2.0",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
+    
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   }
