@@ -8,7 +8,14 @@ class SearchCityContainer extends Component {
         
         this.state = {
             citySuggestions: [],
-            searchValue: ''
+            searchValue: '',
+            currentCity: ''
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.newCity !== this.state.currentCity) {
+            this.clearSearch()
         }
     }
 
@@ -26,6 +33,13 @@ class SearchCityContainer extends Component {
         })
     }
 
+    clearSearch() {
+        this.setState({
+            searchValue: '',
+            citySuggestions: []
+        });
+    }
+
     render() {
         return (
             <div>
@@ -40,6 +54,7 @@ class SearchCityContainer extends Component {
 }
 
 SearchCityContainer.propTypes = {
+    newCity: PropTypes.string.isRequired,
     handleChangeCity: PropTypes.func.isRequired
 };
 

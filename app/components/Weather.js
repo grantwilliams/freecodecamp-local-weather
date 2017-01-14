@@ -1,8 +1,6 @@
 import React, {PropTypes} from 'react';
 
 const Weather = props => {
-    console.log(props.weatherDetails);
-    document.body.style.backgroundImage = `url(${props.backgroundImage})`
     function toTitleCase(str) {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }

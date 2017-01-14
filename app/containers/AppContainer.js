@@ -15,8 +15,9 @@ class AppContainer extends Component {
             units: 'metric',
             coords: undefined,
             weatherDetails: undefined,
-            searchValue: '',
-            citySuggestions: []
+            newCity: '',
+            citySuggestions: [],
+            backgroundImage: undefined
         }
     }
 
@@ -51,7 +52,7 @@ class AppContainer extends Component {
                     },
                     weatherDetails: details.data,
                     backgroundImage: backgroundToUse,
-                    searchValue: ''
+                    newCity: details.data.name
                 });
             })
         })
@@ -90,8 +91,19 @@ class AppContainer extends Component {
     }
 
     render() {
+        let bgStyle = {
+            backgroundImage: `url('${this.state.backgroundImage}')`
+        }
         return (
             <div id="main-wrapper" className="container">
+                <ReactCSSTransitionGroup
+                transitionName="background"
+                transitionAppear={true}
+                transitionAppearTimeout={1500}
+                transitionEnterTimeout={1500}
+                transitionLeaveTimeout={1500} >
+                    <div id="background" style={this.state.backgroundImage === undefined ? null : bgStyle} key={this.state.backgroundImage}></div>
+                </ReactCSSTransitionGroup>
                 <div id="title-text" className="text-center">
                     Local Weather App
                     <div id="sub-title" className="text-center">
@@ -99,6 +111,7 @@ class AppContainer extends Component {
                     </div>
                 </div>
                 <SearchCityContainer
+                newCity={this.state.newCity}
                 handleChangeCity={this.handleChangeCity.bind(this)} />
                 {this.state.isLoading
                 ? <Loading />
@@ -106,8 +119,8 @@ class AppContainer extends Component {
                 transitionName="weather"
                 transitionAppear={true}
                 transitionLeave={false}
-                transitionAppearTimeout={500}
-                transitionEnterTimeout={500}
+                transitionAppearTimeout={1500}
+                transitionEnterTimeout={1500}
                 component="div"
                 className="weather-details" >
                 <Weather
@@ -116,7 +129,6 @@ class AppContainer extends Component {
                   currentTemperature={Math.floor(this.state.weatherDetails.main.temp)}
                   units={this.state.units}
                   handleToggleUnits={this.handleToggleUnits.bind(this)}
-                  backgroundImage={this.state.backgroundImage}
                   key={this.state.weatherDetails.name} /> 
                   </ReactCSSTransitionGroup>
                 }

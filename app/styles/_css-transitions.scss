@@ -4,7 +4,7 @@
 
 .weather-appear.weather-appear-active {
   opacity: 1;
-  transition: opacity 500ms ease-in;
+  transition: opacity 1500ms ease-in;
 }
 
 .weather-enter {
@@ -13,7 +13,7 @@
 
 .weather-enter.weather-enter-active {
   opacity: 1;
-  transition: opacity 500ms ease-in;
+  transition: opacity 1500ms ease-in;
 }
 
 .weather-leave {
@@ -23,4 +23,31 @@
 .weather-leave.weather-leave-active {
   opacity: 0.01;
   transition: opacity 300ms ease-in;
+}
+
+.background-appear {
+  opacity: 0.01;
+}
+
+.background-appear.background-appear-active {
+  opacity: 1;
+  transition: opacity 1500ms ease-in;
+}
+
+.background-enter {
+  opacity: 0.01;
+}
+
+.background-enter.background-enter-active {
+  opacity: 1;
+  transition: opacity 1500ms ease-in;
+}
+
+.background-leave {
+  opacity: 1;
+}
+
+.background-leave.background-leave-active {
+  opacity: 0.01;
+  transition: opacity 1500ms ease-in;
 }
