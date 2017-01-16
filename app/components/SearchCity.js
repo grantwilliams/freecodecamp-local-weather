@@ -10,7 +10,7 @@ const SearchCity = props => {
                     )
                 })}
             </datalist>
-            <form id="search-form" className="form-group col-xs-12 col-md-offset-3 col-md-6" onSubmit={props.handleChangeCity}>
+            <form id="search-form" className="form-group col-xs-12 col-sm-offset-3 col-sm-6" onSubmit={props.handleChangeCity}>
                 <div className="form-group">
                     <div className="input-group">
                         <input

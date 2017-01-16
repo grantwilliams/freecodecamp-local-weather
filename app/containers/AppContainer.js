@@ -23,13 +23,23 @@ class AppContainer extends Component {
 
     handleToggleUnits() {
         let newUnits = this.state.units == 'metric' ? 'imperial' : 'metric'
-        api.getWeatherLongLat(this.state.coords, newUnits)
-        .then(details => {
-            this.setState({
+        api.getWeatherLongLat(this.state.coords, newUnits).then(currentDetails => {
+            var newState = {
                 isLoading: false,
-                weatherDetails: details.data,
+                weatherDetails: currentDetails.data,
                 units: newUnits
-            });
+            }
+            api.getForecastLongLat(this.state.coords, newUnits).then(forecastWeatherDetails => {
+                newState = {
+                    ...newState,
+                    weatherDetails: {
+                        ...newState.weatherDetails,
+                        min_temp: forecastWeatherDetails.data.list[0].temp.min,
+                        max_temp: forecastWeatherDetails.data.list[0].temp.max
+                    }
+                }
+                this.setState(newState);
+            })
         })
     }
 
@@ -45,7 +55,7 @@ class AppContainer extends Component {
                     sunset: new Date(timeDetails.data.sunset)
                 }
                 var backgroundToUse = api.getBackgroundImage(details, timeDetails)
-                this.setState({
+                var newState = {
                     coords: {
                         latitude: details.data.coord.lat,
                         longitude: details.data.coord.lon
@@ -53,7 +63,18 @@ class AppContainer extends Component {
                     weatherDetails: details.data,
                     backgroundImage: backgroundToUse,
                     newCity: details.data.name
-                });
+                }
+                api.getForecastByCity(newCity, this.state.units).then(forecastWeatherDetails => {
+                    newState = {
+                        ...newState,
+                        weatherDetails: {
+                            ...newState.weatherDetails,
+                            min_temp: forecastWeatherDetails.data.list[0].temp.min,
+                            max_temp: forecastWeatherDetails.data.list[0].temp.max
+                        }
+                    }
+                    this.setState(newState);
+                })
             })
         })
     }
@@ -76,14 +97,25 @@ class AppContainer extends Component {
                         sunrise: new Date(timeDetails.data.sunrise),
                         sunset: new Date(timeDetails.data.sunset)
                     }
-                    api.getWeatherLongLat(coords, this.state.units).then(details => {
-                        var backgroundToUse = api.getBackgroundImage(details, timeDetails)
-                        this.setState({
+                    api.getWeatherLongLat(coords, this.state.units).then(currentWeatherDetails => {
+                        var backgroundToUse = api.getBackgroundImage(currentWeatherDetails, timeDetails)
+                        var newState = {
                             isLoading: false,
                             coords: coords,
-                            weatherDetails: details.data,
+                            weatherDetails: currentWeatherDetails.data,
                             backgroundImage: backgroundToUse
-                        });
+                        }
+                        api.getForecastLongLat(coords, this.state.units).then(forecastWeatherDetails => {
+                            newState = {
+                                ...newState,
+                                weatherDetails: {
+                                    ...newState.weatherDetails,
+                                    min_temp: forecastWeatherDetails.data.list[0].temp.min,
+                                    max_temp: forecastWeatherDetails.data.list[0].temp.max
+                                }
+                            }
+                            this.setState(newState);
+                        })
                     })
                 })
             }
@@ -124,12 +156,14 @@ class AppContainer extends Component {
                 component="div"
                 className="weather-details" >
                 <Weather
-                  weatherDetails={this.state.weatherDetails}
-                  icon={this.state.weatherDetails.weather[0].icon + ".png"}
-                  currentTemperature={Math.floor(this.state.weatherDetails.main.temp)}
-                  units={this.state.units}
-                  handleToggleUnits={this.handleToggleUnits.bind(this)}
-                  key={this.state.weatherDetails.name} /> 
+                weatherDetails={this.state.weatherDetails}
+                icon={this.state.weatherDetails.weather[0].icon + ".png"}
+                currentTemperature={Math.floor(this.state.weatherDetails.main.temp)}
+                minTemperature={Math.floor(this.state.weatherDetails.min_temp)}
+                maxTemperature={Math.floor(this.state.weatherDetails.max_temp)}
+                units={this.state.units}
+                handleToggleUnits={this.handleToggleUnits.bind(this)}
+                key={this.state.weatherDetails.name} /> 
                   </ReactCSSTransitionGroup>
                 }
             </div>

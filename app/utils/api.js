@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-var GOOGLE_API_KEY = "AIzaSyB5APi4RDY_0ZT2TixD_2IJu9AZ4xik6bE"
-var GOOGLE_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="
 var API_ID = "74eceb0c9986322baa038efe36e2f660"
-var BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
+var BASE_URL = "http://api.openweathermap.org/data/2.5/"
 
 var backgrounds = {
     'cloudy': {'night': 'http://i.imgur.com/RKvJT8q.jpg', 'day': 'http://i.imgur.com/9BN14fr.jpg'},
@@ -42,10 +40,16 @@ export var api = {
         })
     },
     getWeatherLongLat: function (coords, units) {
-        return axios.get(`${BASE_URL}lat=${coords.latitude}&lon=${coords.longitude}&units=${units}&APPID=${API_ID}`)
+        return axios.get(`${BASE_URL}weather?lat=${coords.latitude}&lon=${coords.longitude}&units=${units}&APPID=${API_ID}`)
     },
     getWeatherByCity: function (city, units) {
-        return axios.get(`${BASE_URL}q=${city}&units=${units}&APPID=${API_ID}`)
+        return axios.get(`${BASE_URL}weather?q=${city}&units=${units}&APPID=${API_ID}`)
+    },
+    getForecastLongLat: function (coords, units) {
+        return axios.get(`${BASE_URL}forecast/daily?lat=${coords.latitude}&lon=${coords.longitude}&units=${units}&APPID=${API_ID}`)
+    },
+    getForecastByCity: function (city, units) {
+        return axios.get(`${BASE_URL}forecast/daily?q=${city}&units=${units}&APPID=${API_ID}`)
     },
     getCitySuggestions: function (city) {
         return axios.get(`http://api.geonames.org/searchJSON?username=grantwilliams&q=${city}&maxRows=10`)
