@@ -81,8 +81,7 @@ class AppContainer extends Component {
 
     componentDidMount() {
         let coords;
-        api.getLocation()
-        .then(position => {
+        api.getLocation().then(position => {
             if(position.error) {
                 alert("Geolocation is not supported by this browser.")
             } else {
@@ -166,6 +165,13 @@ class AppContainer extends Component {
                 key={this.state.weatherDetails.name} /> 
                   </ReactCSSTransitionGroup>
                 }
+                <div className="text-center" id="source-code">
+                    <a href="https://github.com/grantwilliams/freecodecamp-local-weather" target="_blank">
+                        <button className="btn btn-success">
+                            Source code on GitHub <i className="fa fa-github"></i>
+                        </button>
+                    </a>
+                </div>
             </div>
         );
     }

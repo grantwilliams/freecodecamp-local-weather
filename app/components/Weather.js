@@ -15,53 +15,44 @@ const Weather = props => {
                     <img src={"http://openweathermap.org/img/w/" + props.icon} /> {`${props.currentTemperature} ${deg}${props.units == 'metric' ? 'C' : 'F'}`}
                 </span><button className="btn btn-primary" id="toggle-units" onClick={props.handleToggleUnits}> Toggle C/F </button>
             </div>
-            <div id="details" className="">
-                <div className="col-xs-12">
-                    <div id="country" className="col-xs-4">
-                        <div className="detail-box">
-                            {`${props.weatherDetails.name}, ${props.weatherDetails.sys.country}`}
-                        </div>
-                    </div>
-                    <div id="description" className="col-xs-4">
+            <div id="details">
+                <div className="col-xs-12 col-sm-12">
+                    <div id="description" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
                             {toTitleCase(props.weatherDetails.weather[0].description)}
                         </div>
                     </div>
-                    <div id="temp-min" className="col-xs-4">
-                        <div className="detail-box">
-                            {`Min temp: ${props.minTemperature} ${deg}${props.units == 'metric' ? 'C' : 'F'}`}
-                        </div>
-                    </div>
-                </div>
-                <div className="col-xs-12">
-                    <div id="temp-max" className="col-xs-4">
-                        <div className="detail-box">
-                            {`Max temp: ${props.maxTemperature} ${deg}${props.units == 'metric' ? 'C' : 'F'}`}
-                        </div>
-                    </div>
-                    <div id="humidity" className="col-xs-4">
-                        <div className="detail-box">
-                            {`Humidity: ${props.weatherDetails.main.humidity}%`}
-                        </div>
-                    </div>
-                    <div id="cloudiness" className="col-xs-4">
+                    <div id="cloudiness" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
                             {`Cloudiness: ${props.weatherDetails.clouds.all}%`}
                         </div>
                     </div>
-                </div>
-                <div className="col-xs-12">
-                    <div id="wind-speed" className="col-xs-4">
+                    <div id="temp-min" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
-                            {`Wind Speed: ${props.weatherDetails.wind.speed} ${props.units == 'metric' ? ' m/s' : ' mph'}`}
+                            {`Min temp: ${props.minTemperature} ${deg}${props.units == 'metric' ? 'C' : 'F'}`}
                         </div>
                     </div>
-                    <div id="wind-direction" className="col-xs-4">
+                    <div id="temp-max" className="col-xs-6 col-sm-3">
+                        <div className="detail-box">
+                            {`Max temp: ${props.maxTemperature} ${deg}${props.units == 'metric' ? 'C' : 'F'}`}
+                        </div>
+                    </div>
+                    <div id="wind-speed" className="col-xs-6 col-sm-3">
+                        <div className="detail-box">
+                            {`Wind: ${props.weatherDetails.wind.speed} ${props.units == 'metric' ? ' m/s' : ' mph'}`}
+                        </div>
+                    </div>
+                    <div id="wind-direction" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
                             {`Wind Direction: ${props.weatherDetails.wind.deg === undefined ? "n/a" : `${props.weatherDetails.wind.deg} ${deg}`}`}
                         </div>
                     </div>
-                    <div id="pressure" className="col-xs-4">
+                    <div id="humidity" className="col-xs-6 col-sm-3">
+                        <div className="detail-box">
+                            {`Humidity: ${props.weatherDetails.main.humidity}%`}
+                        </div>
+                    </div>
+                    <div id="pressure" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
                             {`Pressure: ${props.weatherDetails.main.pressure} hPa`}
                         </div>
