@@ -9,13 +9,13 @@ var snowyCode = [1066, 1114, 1117, 1210, 1213, 1216, 1219, 1222, 1225, 1255, 125
 var stormyCode = [1087, 1273, 1276]
 var mistyCode = [1030, 1135, 1147]
 var backgrounds = {
-    'cloudy': {'night': 'http://i.imgur.com/RKvJT8q.jpg', 'day': 'http://i.imgur.com/9BN14fr.jpg'},
-    'hot': {'night': 'http://i.imgur.com/TUkAiY0.jpg', 'day': 'http://i.imgur.com/TUkAiY0.jpg'},
-    'raining': {'night': 'http://i.imgur.com/wOig7Nu.jpg', 'day': 'http://i.imgur.com/G9Ikmxe.jpg'},
-    'snowing': {'night': 'http://i.imgur.com/WFI2VlZ.jpg', 'day': 'http://i.imgur.com/F6kInOS.jpg'},
-    'stormy': {'night': 'http://i.imgur.com/0cuXyGR.jpg', 'day': 'http://i.imgur.com/0cuXyGR.jpg'},
-    'clear': {'night': 'http://i.imgur.com/ZuFo52Y.jpg', 'day': 'http://i.imgur.com/SI8TbKh.jpg'},
-    'misty': {'night': 'http://i.imgur.com/QRs96Ux.jpg', 'day': 'http://i.imgur.com/TTu4wS5.jpg'}
+    'cloudy': {'night': 'https://i.imgur.com/RKvJT8q.jpg', 'day': 'https://i.imgur.com/9BN14fr.jpg'},
+    'hot': {'night': 'https://i.imgur.com/TUkAiY0.jpg', 'day': 'https://i.imgur.com/TUkAiY0.jpg'},
+    'raining': {'night': 'https://i.imgur.com/wOig7Nu.jpg', 'day': 'https://i.imgur.com/G9Ikmxe.jpg'},
+    'snowing': {'night': 'https://i.imgur.com/WFI2VlZ.jpg', 'day': 'https://i.imgur.com/F6kInOS.jpg'},
+    'stormy': {'night': 'https://i.imgur.com/0cuXyGR.jpg', 'day': 'https://i.imgur.com/0cuXyGR.jpg'},
+    'clear': {'night': 'https://i.imgur.com/ZuFo52Y.jpg', 'day': 'https://i.imgur.com/SI8TbKh.jpg'},
+    'misty': {'night': 'https://i.imgur.com/QRs96Ux.jpg', 'day': 'https://i.imgur.com/TTu4wS5.jpg'}
 }
 
 export function geoLocate () {

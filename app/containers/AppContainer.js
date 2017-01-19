@@ -108,7 +108,7 @@ class AppContainer extends Component {
                 <Weather
                 currentWeather={this.state.currentWeather}
                 forecastWeather={this.state.forecastWeather}
-                icon={`http:${this.state.currentWeather.condition.icon}`}
+                icon={`https:${this.state.currentWeather.condition.icon}`}
                 location={this.state.location}
                 currentTemperature={Math.floor(this.state.currentWeather[`temp_${temp_unit}`])}
                 minTemperature={Math.floor(this.state.forecastWeather.day[`mintemp_${temp_unit}`])}
