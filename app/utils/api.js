@@ -18,26 +18,6 @@ var backgrounds = {
     'misty': {'night': 'https://i.imgur.com/QRs96Ux.jpg', 'day': 'https://i.imgur.com/TTu4wS5.jpg'}
 }
 
-export function geoLocate () {
-    return new Promise((resolve) => {
-        let position = {
-            error: false
-        }
-        if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-            position = {
-                latitude: pos.coords.latitude,
-                longitude: pos.coords.longitude
-            }
-            resolve(position)
-        });
-    } else {
-        position.error = true
-        resolve(position)
-    }
-    })
-}
-
 export var api = {
     getWeather: function (city=null) {
         return axios.get(`${APIXU_BASE_URL}forecast.json?key=${APIXU_KEY}&q=${city == null ? 'auto:ip' : city}`)
