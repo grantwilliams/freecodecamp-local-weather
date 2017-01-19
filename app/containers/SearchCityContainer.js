@@ -24,8 +24,8 @@ class SearchCityContainer extends Component {
             searchValue: e.target.value
         });
         api.getCitySuggestions(e.target.value).then(results => {
-            var citySuggestions = results.data.geonames.map(suggestion => {
-                return `${suggestion.name}, ${suggestion.countryCode}`
+            var citySuggestions = results.data.map((suggestion, key) => {
+                return <option value={suggestion.name} key={key}>{suggestion.name}</option>
             })
             this.setState({
                 citySuggestions: citySuggestions

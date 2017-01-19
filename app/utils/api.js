@@ -1,8 +1,13 @@
 import axios from 'axios';
 
-var API_ID = "74eceb0c9986322baa038efe36e2f660"
-var BASE_URL = "http://api.openweathermap.org/data/2.5/"
+var APIXU_KEY = "1684580502d9494c997155118171901"
+var APIXU_BASE_URL = "https://api.apixu.com/v1/"
 
+var cloudyCode = [1003, 1006, 1009]
+var rainyCode = [1063, 1069, 1072, 1150, 1153, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1204, 1207, 1237, 1240, 1243, 1246, 1249, 1252, 1261, 1264]
+var snowyCode = [1066, 1114, 1117, 1210, 1213, 1216, 1219, 1222, 1225, 1255, 1258, 1279, 1282]
+var stormyCode = [1087, 1273, 1276]
+var mistyCode = [1030, 1135, 1147]
 var backgrounds = {
     'cloudy': {'night': 'http://i.imgur.com/RKvJT8q.jpg', 'day': 'http://i.imgur.com/9BN14fr.jpg'},
     'hot': {'night': 'http://i.imgur.com/TUkAiY0.jpg', 'day': 'http://i.imgur.com/TUkAiY0.jpg'},
@@ -34,50 +39,25 @@ export function geoLocate () {
 }
 
 export var api = {
-    getLocation: function () {
-        return geoLocate().then(position => {
-            return position
-        })
-    },
-    getWeatherLongLat: function (coords, units) {
-        return axios.get(`${BASE_URL}weather?lat=${coords.latitude}&lon=${coords.longitude}&units=${units}&APPID=${API_ID}`)
-    },
-    getWeatherByCity: function (city, units) {
-        return axios.get(`${BASE_URL}weather?q=${city}&units=${units}&APPID=${API_ID}`)
-    },
-    getForecastLongLat: function (coords, units) {
-        return axios.get(`${BASE_URL}forecast/daily?lat=${coords.latitude}&lon=${coords.longitude}&units=${units}&APPID=${API_ID}`)
-    },
-    getForecastByCity: function (city, units) {
-        return axios.get(`${BASE_URL}forecast/daily?q=${city}&units=${units}&APPID=${API_ID}`)
+    getWeather: function (city=null) {
+        return axios.get(`${APIXU_BASE_URL}forecast.json?key=${APIXU_KEY}&q=${city == null ? 'auto:ip' : city}`)
     },
     getCitySuggestions: function (city) {
-        return axios.get(`http://api.geonames.org/searchJSON?username=grantwilliams&q=${city}&maxRows=10`)
+        return axios.get(`${APIXU_BASE_URL}search.json?key=${APIXU_KEY}&q=${city}`)
     },
-    getCityTime: function (coords) {
-        return axios.get(`http://api.geonames.org/timezoneJSON?lat=${coords.latitude}&lng=${coords.longitude}&username=grantwilliams`)
-    },
-    getBackgroundImage: function (weatherData, timeData) {
-        var timeOfDay;
-        if(timeData.cityTime.getHours() >= timeData.sunrise.getHours() && timeData.cityTime.getHours() <= timeData.sunset.getHours()) {
-            timeOfDay = 'day'
-        } else {
-            timeOfDay = 'night'
-        }
+    getBackgroundImage: function (conditionCode, timeOfDay) {
         var backgroundToUse;
-        if (weatherData.data.weather[0].id >= 200 && weatherData.data.weather[0].id <= 232) {
+        if (stormyCode.indexOf(conditionCode) > -1) {
             backgroundToUse = backgrounds['stormy'][timeOfDay];
-        } else if (weatherData.data.weather[0].id >= 300 && weatherData.data.weather[0].id <= 531) {
+        } else if (rainyCode.indexOf(conditionCode) > -1) {
             backgroundToUse = backgrounds['raining'][timeOfDay];
-        } else if (weatherData.data.weather[0].id >= 600 && weatherData.data.weather[0].id <= 622) {
+        } else if (snowyCode.indexOf(conditionCode) > -1) {
             backgroundToUse = backgrounds['snowing'][timeOfDay];
-        } else if (weatherData.data.weather[0].id >= 701 && weatherData.data.weather[0].id <=721) {
+        } else if (mistyCode.indexOf(conditionCode) > -1) {
             backgroundToUse = backgrounds['misty'][timeOfDay]
-        } else if (weatherData.data.weather[0].id == 904) {
-            backgroundToUse = backgrounds['hot'][timeOfDay];
-        } else if (weatherData.data.weather[0].id >= 801 && weatherData.data.weather[0].id <= 804) {
+        } else if (cloudyCode.indexOf(conditionCode) > -1) {
             backgroundToUse = backgrounds['cloudy'][timeOfDay];
-        } else {
+        } else {    
             backgroundToUse = backgrounds['clear'][timeOfDay];
         }
         return backgroundToUse

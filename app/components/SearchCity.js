@@ -4,11 +4,7 @@ const SearchCity = props => {
     return (
         <div className="row" id="search">
             <datalist id="suggestions">
-                {props.suggestions.map((channel, key) => {
-                    return (
-                        <option value={channel} key={key}></option>
-                    )
-                })}
+                {props.suggestions}
             </datalist>
             <form id="search-form" className="form-group col-xs-12 col-sm-offset-3 col-sm-6" onSubmit={props.handleChangeCity}>
                 <div className="form-group">

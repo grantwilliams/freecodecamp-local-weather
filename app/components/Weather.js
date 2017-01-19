@@ -8,23 +8,23 @@ const Weather = props => {
     return (
         <div id="weather-details">
             <div className="text-center">
-                <h3>{`Showing weather for ${props.weatherDetails.name}, ${props.weatherDetails.sys.country}`}</h3>
+                <h3>{`Showing weather for ${props.location.name}, ${props.location.country}`}</h3>
             </div>
             <div id="temperature" className="text-center">
                 <span id="temp-text">
-                    <img src={"http://openweathermap.org/img/w/" + props.icon} /> {`${props.currentTemperature} ${deg}${props.units == 'metric' ? 'C' : 'F'}`}
+                    <img src={props.icon} /> {`${props.currentTemperature} ${deg}${props.units == 'metric' ? 'C' : 'F'}`}
                 </span><button className="btn btn-primary" id="toggle-units" onClick={props.handleToggleUnits}> Toggle C/F </button>
             </div>
             <div id="details">
                 <div className="col-xs-12 col-sm-12">
                     <div id="description" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
-                            {toTitleCase(props.weatherDetails.weather[0].description)}
+                            {toTitleCase(props.currentWeather.condition.text)}
                         </div>
                     </div>
                     <div id="cloudiness" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
-                            {`Cloudiness: ${props.weatherDetails.clouds.all}%`}
+                            {`Cloudiness: ${props.currentWeather.cloud}%`}
                         </div>
                     </div>
                     <div id="temp-min" className="col-xs-6 col-sm-3">
@@ -39,22 +39,22 @@ const Weather = props => {
                     </div>
                     <div id="wind-speed" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
-                            {`Wind: ${props.weatherDetails.wind.speed} ${props.units == 'metric' ? ' m/s' : ' mph'}`}
+                            {`Wind: ${props.wind} ${props.units == 'metric' ? ' km/h' : ' mph'}`}
                         </div>
                     </div>
                     <div id="wind-direction" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
-                            {`Wind Direction: ${props.weatherDetails.wind.deg === undefined ? "n/a" : `${props.weatherDetails.wind.deg} ${deg}`}`}
+                            {`Wind Direction: ${props.currentWeather.wind_degree === undefined ? "n/a" : `${props.currentWeather.wind_degree} ${deg}`}`}
                         </div>
                     </div>
                     <div id="humidity" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
-                            {`Humidity: ${props.weatherDetails.main.humidity}%`}
+                            {`Humidity: ${props.currentWeather.humidity}%`}
                         </div>
                     </div>
                     <div id="pressure" className="col-xs-6 col-sm-3">
                         <div className="detail-box">
-                            {`Pressure: ${props.weatherDetails.main.pressure} hPa`}
+                            {`Pressure: ${props.currentWeather.pressure_mb} mb`}
                         </div>
                     </div>
                 </div>
@@ -64,8 +64,10 @@ const Weather = props => {
 };
 
 Weather.propTypes = {
-    weatherDetails: PropTypes.object.isRequired,
+    currentWeather: PropTypes.object.isRequired,
+    forecastWeather: PropTypes.object.isRequired,
     icon: PropTypes.string.isRequired,
+    location: PropTypes.object.isRequired,
     currentTemperature: PropTypes.number.isRequired,
     minTemperature: PropTypes.number.isRequired,
     maxTemperature: PropTypes.number.isRequired,
