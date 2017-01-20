@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import Header from '../components/Header';
 import Loading from '../components/Loading';
 import Weather from '../components/Weather';
 import SearchCityContainer from './SearchCityContainer';
@@ -14,7 +15,6 @@ class AppContainer extends Component {
             isLoading: true,
             units: 'metric',
             newCity: '',
-            citySuggestions: [],
             backgroundImage: undefined
         }
     }
@@ -27,76 +27,30 @@ class AppContainer extends Component {
 
     handleChangeCity(e) {
         typeof e == 'object' ? e.preventDefault() : null;
-        var newCity = typeof e == 'object' ? e.target.search.value : e
-        api.getWeather(newCity).then(results => {
-            let sunrise = results.data.forecast.forecastday[0].astro.sunrise
-            var time = {
-                now: new Date(results.data.location.localtime),
-                sunrise: new Date(`${results.data.forecast.forecastday[0].date} ${results.data.forecast.forecastday[0].astro.sunrise}`),
-                sunset: new Date(`${results.data.forecast.forecastday[0].date} ${results.data.forecast.forecastday[0].astro.sunset}`)
+        let newCity = typeof e == 'object' ? e.target.search.value : e
+        newCity.length > 0 ? api.getWeather(newCity).then((newState) => {
+            if (newState.error) {
+                alert(newState.error.message)
+            } else {
+                this.setState({
+                    ...newState,
+                    currentlySearching: false
+                });
             }
-            var timeOfDay = time.now >= time.sunrise && time.now <= time.sunset ? 'day' : 'night'
-            let backgroundToUse = api.getBackgroundImage(results.data.current.condition.code, timeOfDay)
-            var newState = {
-                isLoading: false,
-                currentWeather: results.data.current,
-                forecastWeather: results.data.forecast.forecastday[0],
-                location: results.data.location,
-                backgroundImage: backgroundToUse,
-                newCity: results.data.location.name,
-                localTime: time.now
-            }
-            this.setState(newState);
-        })
+        }) : null
     }
 
     componentDidMount() {
-        api.getWeather().then(results => {
-            let sunrise = results.data.forecast.forecastday[0].astro.sunrise
-            var time = {
-                now: new Date(results.data.location.localtime),
-                sunrise: new Date(`${results.data.forecast.forecastday[0].date} ${results.data.forecast.forecastday[0].astro.sunrise}`),
-                sunset: new Date(`${results.data.forecast.forecastday[0].date} ${results.data.forecast.forecastday[0].astro.sunset}`)
-            }
-            var timeOfDay = time.now >= time.sunrise && time.now <= time.sunset ? 'day' : 'night'
-            let backgroundToUse = api.getBackgroundImage(results.data.current.condition.code, timeOfDay)
-            var newState = {
-                isLoading: false,
-                currentWeather: results.data.current,
-                forecastWeather: results.data.forecast.forecastday[0],
-                location: results.data.location,
-                backgroundImage: backgroundToUse,
-                localTime: time.now
-            }
+        api.getWeather().then((newState) => {
             this.setState(newState);
         })
     }
 
     render() {
-        let bgStyle = {
-            backgroundImage: `url('${this.state.backgroundImage}')`
-        }
-        let temp_unit = this.state.units == 'metric' ? 'c' : 'f'
-        let wind_unit = this.state.units == 'metric' ? 'kph' : 'mph'
         return (
             <div id="main-wrapper" className="container">
-                <ReactCSSTransitionGroup
-                transitionName="background"
-                transitionAppear={true}
-                transitionAppearTimeout={1500}
-                transitionEnterTimeout={1500}
-                transitionLeaveTimeout={1500} >
-                    <div id="background" style={this.state.backgroundImage === undefined ? null : bgStyle} key={this.state.backgroundImage}></div>
-                </ReactCSSTransitionGroup>
-                <div id="title-text" className="text-center">
-                    Local Weather App
-                    <div id="sub-title" className="text-center">
-                        FreeCodeCamp Zipline
-                    </div>
-                </div>
-                <SearchCityContainer
-                newCity={this.state.newCity}
-                handleChangeCity={this.handleChangeCity.bind(this)} />
+                <Header backgroundImage={this.state.backgroundImage} />
+                <SearchCityContainer newCity={this.state.newCity} handleChangeCity={this.handleChangeCity.bind(this)} />
                 {this.state.isLoading
                 ? <Loading />
                 : <ReactCSSTransitionGroup
@@ -110,12 +64,7 @@ class AppContainer extends Component {
                     <Weather
                     currentWeather={this.state.currentWeather}
                     forecastWeather={this.state.forecastWeather}
-                    icon={`https:${this.state.currentWeather.condition.icon}`}
                     location={this.state.location}
-                    currentTemperature={Math.floor(this.state.currentWeather[`temp_${temp_unit}`])}
-                    minTemperature={Math.floor(this.state.forecastWeather.day[`mintemp_${temp_unit}`])}
-                    maxTemperature={Math.floor(this.state.forecastWeather.day[`maxtemp_${temp_unit}`])}
-                    wind={this.state.currentWeather[`wind_${wind_unit}`]}
                     units={this.state.units}
                     localTime={api.getDateAsText(this.state.localTime)}
                     handleToggleUnits={this.handleToggleUnits.bind(this)}
@@ -133,9 +82,5 @@ class AppContainer extends Component {
         );
     }
 }
-
-AppContainer.propTypes = {
-
-};
 
 export default AppContainer;

@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-var APIXU_KEY = "1684580502d9494c997155118171901"
-var APIXU_BASE_URL = "https://api.apixu.com/v1/"
+let APIXU_KEY = "1684580502d9494c997155118171901"
+let APIXU_BASE_URL = "https://api.apixu.com/v1/"
 
-var cloudyCode = [1003, 1006, 1009]
-var rainyCode = [1063, 1069, 1072, 1150, 1153, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1204, 1207, 1237, 1240, 1243, 1246, 1249, 1252, 1261, 1264]
-var snowyCode = [1066, 1114, 1117, 1210, 1213, 1216, 1219, 1222, 1225, 1255, 1258, 1279, 1282]
-var stormyCode = [1087, 1273, 1276]
-var mistyCode = [1030, 1135, 1147]
-var backgrounds = {
+let cloudyCode = [1003, 1006, 1009]
+let rainyCode = [1063, 1069, 1072, 1150, 1153, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1204, 1207, 1237, 1240, 1243, 1246, 1249, 1252, 1261, 1264]
+let snowyCode = [1066, 1114, 1117, 1210, 1213, 1216, 1219, 1222, 1225, 1255, 1258, 1279, 1282]
+let stormyCode = [1087, 1273, 1276]
+let mistyCode = [1030, 1135, 1147]
+let backgrounds = {
     'cloudy': {'night': 'https://i.imgur.com/RKvJT8q.jpg', 'day': 'https://i.imgur.com/9BN14fr.jpg'},
     'hot': {'night': 'https://i.imgur.com/TUkAiY0.jpg', 'day': 'https://i.imgur.com/TUkAiY0.jpg'},
     'raining': {'night': 'https://i.imgur.com/wOig7Nu.jpg', 'day': 'https://i.imgur.com/G9Ikmxe.jpg'},
@@ -18,9 +18,9 @@ var backgrounds = {
     'misty': {'night': 'https://i.imgur.com/QRs96Ux.jpg', 'day': 'https://i.imgur.com/TTu4wS5.jpg'}
 }
 
-var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-var getOrdinal = function (date) {
+let getOrdinal = function (date) {
     switch (date) {
         case 1:
         case 21:
@@ -37,25 +37,48 @@ var getOrdinal = function (date) {
     }
 }
 
-var getHour = function (dateObj) {
+let getHour = function (dateObj) {
     let hour = dateObj.getHours()
     return hour < 10 ? `0${hour}` : hour
 }
 
-var getMinute = function (dateObj) {
+let getMinute = function (dateObj) {
     let minute = dateObj.getMinutes()
     return minute < 10 ? `0${minute}` : minute
 }
 
-export var api = {
-    getWeather: function (city=null) {
-        return axios.get(`${APIXU_BASE_URL}forecast.json?key=${APIXU_KEY}&q=${city == null ? 'auto:ip' : city}`)
+export let api = {
+    getWeather: function (city=undefined) {
+        return axios.get(`${APIXU_BASE_URL}forecast.json?key=${APIXU_KEY}&q=${city == undefined ? 'auto:ip' : city}`).then((results) => {
+            if (results.data.error) {
+                return results.data
+            } else {
+                let sunrise = results.data.forecast.forecastday[0].astro.sunrise
+                let time = {
+                    now: new Date(results.data.location.localtime),
+                    sunrise: new Date(`${results.data.forecast.forecastday[0].date} ${results.data.forecast.forecastday[0].astro.sunrise}`),
+                    sunset: new Date(`${results.data.forecast.forecastday[0].date} ${results.data.forecast.forecastday[0].astro.sunset}`)
+                }
+                let timeOfDay = time.now >= time.sunrise && time.now <= time.sunset ? 'day' : 'night'
+                let backgroundToUse = api.getBackgroundImage(results.data.current.condition.code, timeOfDay)
+                let newState = {
+                    isLoading: false,
+                    currentWeather: results.data.current,
+                    forecastWeather: results.data.forecast.forecastday[0],
+                    location: results.data.location,
+                    backgroundImage: backgroundToUse,
+                    newCity: results.data.location.name,
+                    localTime: time.now
+                }
+                return newState
+            }
+        })
     },
     getCitySuggestions: function (city) {
         return axios.get(`${APIXU_BASE_URL}search.json?key=${APIXU_KEY}&q=${city}`)
     },
     getBackgroundImage: function (conditionCode, timeOfDay) {
-        var backgroundToUse;
+        let backgroundToUse;
         if (stormyCode.indexOf(conditionCode) > -1) {
             backgroundToUse = backgrounds['stormy'][timeOfDay];
         } else if (rainyCode.indexOf(conditionCode) > -1) {

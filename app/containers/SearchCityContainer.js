@@ -9,34 +9,42 @@ class SearchCityContainer extends Component {
         this.state = {
             citySuggestions: [],
             searchValue: '',
-            currentCity: ''
+            currentlySearching: false
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.newCity !== this.state.currentCity) {
+        if(nextProps.newCity !== '') {
             this.clearSearch()
         }
     }
 
     handleOnChange(e) {
-        this.setState({
-            searchValue: e.target.value
-        });
-        api.getCitySuggestions(e.target.value).then(results => {
-            var citySuggestions = results.data.map((suggestion, key) => {
-                return <option value={suggestion.name} key={key}>{suggestion.name}</option>
-            })
+        let searchValue = e.target.value
+        this.setState({searchValue: searchValue});
+        if (searchValue.length == 0) {
             this.setState({
-                citySuggestions: citySuggestions
+                searchValue: '',
+                currentlySearching: false
             });
-        })
+        } else {
+            api.getCitySuggestions(searchValue).then((results) => {
+                let citySuggestions = results.data.map((suggestion, key) => {
+                    return <option value={suggestion.name} key={key}>{suggestion.name}</option>
+                })
+                this.setState({
+                    citySuggestions: citySuggestions,
+                    currentlySearching: true
+                });
+            })
+        }
     }
 
     clearSearch() {
         this.setState({
             searchValue: '',
-            citySuggestions: []
+            citySuggestions: [],
+            currentlySearching: false
         });
     }
 
@@ -47,7 +55,8 @@ class SearchCityContainer extends Component {
                 handleOnChange={this.handleOnChange.bind(this)}
                 handleChangeCity={this.props.handleChangeCity}
                 suggestions={this.state.citySuggestions}
-                value={this.state.searchValue} />
+                value={this.state.searchValue}
+                currentlySearching={this.state.currentlySearching} />
             </div>
         );
     }
