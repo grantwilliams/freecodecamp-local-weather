@@ -43,7 +43,8 @@ class AppContainer extends Component {
                 forecastWeather: results.data.forecast.forecastday[0],
                 location: results.data.location,
                 backgroundImage: backgroundToUse,
-                newCity: results.data.location.name
+                newCity: results.data.location.name,
+                localTime: time.now
             }
             this.setState(newState);
         })
@@ -64,7 +65,8 @@ class AppContainer extends Component {
                 currentWeather: results.data.current,
                 forecastWeather: results.data.forecast.forecastday[0],
                 location: results.data.location,
-                backgroundImage: backgroundToUse
+                backgroundImage: backgroundToUse,
+                localTime: time.now
             }
             this.setState(newState);
         })
@@ -105,18 +107,19 @@ class AppContainer extends Component {
                 transitionEnterTimeout={1500}
                 component="div"
                 className="weather-details" >
-                <Weather
-                currentWeather={this.state.currentWeather}
-                forecastWeather={this.state.forecastWeather}
-                icon={`https:${this.state.currentWeather.condition.icon}`}
-                location={this.state.location}
-                currentTemperature={Math.floor(this.state.currentWeather[`temp_${temp_unit}`])}
-                minTemperature={Math.floor(this.state.forecastWeather.day[`mintemp_${temp_unit}`])}
-                maxTemperature={Math.floor(this.state.forecastWeather.day[`maxtemp_${temp_unit}`])}
-                wind={this.state.currentWeather[`wind_${wind_unit}`]}
-                units={this.state.units}
-                handleToggleUnits={this.handleToggleUnits.bind(this)}
-                key={this.state.location.name} /> 
+                    <Weather
+                    currentWeather={this.state.currentWeather}
+                    forecastWeather={this.state.forecastWeather}
+                    icon={`https:${this.state.currentWeather.condition.icon}`}
+                    location={this.state.location}
+                    currentTemperature={Math.floor(this.state.currentWeather[`temp_${temp_unit}`])}
+                    minTemperature={Math.floor(this.state.forecastWeather.day[`mintemp_${temp_unit}`])}
+                    maxTemperature={Math.floor(this.state.forecastWeather.day[`maxtemp_${temp_unit}`])}
+                    wind={this.state.currentWeather[`wind_${wind_unit}`]}
+                    units={this.state.units}
+                    localTime={api.getDateAsText(this.state.localTime)}
+                    handleToggleUnits={this.handleToggleUnits.bind(this)}
+                    key={this.state.location.name} /> 
                   </ReactCSSTransitionGroup>
                 }
                 <div className="text-center" id="source-code">

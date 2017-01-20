@@ -18,6 +18,35 @@ var backgrounds = {
     'misty': {'night': 'https://i.imgur.com/QRs96Ux.jpg', 'day': 'https://i.imgur.com/TTu4wS5.jpg'}
 }
 
+var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+var getOrdinal = function (date) {
+    switch (date) {
+        case 1:
+        case 21:
+        case 31:
+            return 'st';
+        case 2:
+        case 22:
+            return 'nd';
+        case 3:
+        case 23:
+            return 'rd';
+        default:
+            return 'th';
+    }
+}
+
+var getHour = function (dateObj) {
+    let hour = dateObj.getHours()
+    return hour < 10 ? `0${hour}` : hour
+}
+
+var getMinute = function (dateObj) {
+    let minute = dateObj.getMinutes()
+    return minute < 10 ? `0${minute}` : minute
+}
+
 export var api = {
     getWeather: function (city=null) {
         return axios.get(`${APIXU_BASE_URL}forecast.json?key=${APIXU_KEY}&q=${city == null ? 'auto:ip' : city}`)
@@ -41,6 +70,9 @@ export var api = {
             backgroundToUse = backgrounds['clear'][timeOfDay];
         }
         return backgroundToUse
+    },
+    getDateAsText: function (dateObj) {
+        return `${getHour(dateObj)}:${getMinute(dateObj)} on ${dateObj.getDate()}${getOrdinal(dateObj.getDate())} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`
     }
 }
 

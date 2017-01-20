@@ -15,6 +15,9 @@ const Weather = props => {
                     <img src={props.icon} /> {`${props.currentTemperature} ${deg}${props.units == 'metric' ? 'C' : 'F'}`}
                 </span><button className="btn btn-primary" id="toggle-units" onClick={props.handleToggleUnits}> Toggle C/F </button>
             </div>
+            <div id="time" className="text-center">
+                {`Local time: ${props.localTime}`}
+            </div>
             <div id="details">
                 <div className="col-xs-12 col-sm-12">
                     <div id="description" className="col-xs-6 col-sm-3">
